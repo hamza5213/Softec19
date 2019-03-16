@@ -17,6 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.Login"></activity>
+        <activity android:name=".Activity.UserProfile"></activity>
+        <activity android:name=".Activity.VideoDisplay" />
+        <activity android:name=".Activity.AdminActivity"></activity>
         <activity android:name=".Activity.UserProfile">
 
         </activity>
