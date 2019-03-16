@@ -9,15 +9,18 @@ public class CommentsModel {
     String commentId;
     String userId;
     String text;
+    String username;
+
 
 
     public CommentsModel() {
     }
 
-    public CommentsModel(String commentId, String userId, String text) {
+    public CommentsModel(String commentId, String userId, String text, String username) {
         this.commentId = commentId;
         this.userId = userId;
         this.text = text;
+        this.username = username;
     }
 
     @Exclude
@@ -28,6 +31,14 @@ public class CommentsModel {
     @Exclude
     public void setCommentId(String commentId) {
         this.commentId = commentId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUserId() {

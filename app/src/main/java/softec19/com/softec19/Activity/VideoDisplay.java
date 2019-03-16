@@ -1,5 +1,7 @@
 package softec19.com.softec19.Activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -101,7 +103,9 @@ public class VideoDisplay extends AppCompatActivity {
     public void onCommentAdd(View view){
 
         String text=commentBox.getText().toString();
-        CommentsModel commentsModel=new CommentsModel(null, FirebaseAuth.getInstance().getUid(),text);
+        SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString("Name",null);
+        CommentsModel commentsModel=new CommentsModel(null, FirebaseAuth.getInstance().getUid(),text,username);
         FirebaseDatabase.getInstance().getReference().child("CommentBucket").child(commentBucketId).push().setValue(commentsModel);
     }
 
