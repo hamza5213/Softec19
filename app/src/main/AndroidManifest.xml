@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlayVideo"></activity>
+        <activity android:name=".Activity.PlayVideo"></activity>
         <activity android:name=".Activity.Login" />
         <activity android:name=".Activity.UserProfile"></activity>
     </application>

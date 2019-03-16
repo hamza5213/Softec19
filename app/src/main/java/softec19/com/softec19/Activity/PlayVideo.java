@@ -1,8 +1,6 @@
-package softec19.com.softec19;
+package softec19.com.softec19.Activity;
 
-import android.content.Context;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -12,6 +10,7 @@ import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import cafe.adriel.androidstreamable.AndroidStreamable;
 import cafe.adriel.androidstreamable.callback.VideoCallback;
 import cafe.adriel.androidstreamable.model.Video;
+import softec19.com.softec19.R;
 
 public class PlayVideo extends AppCompatActivity implements OnPreparedListener {
 

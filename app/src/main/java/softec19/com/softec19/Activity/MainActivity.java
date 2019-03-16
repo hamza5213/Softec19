@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import softec19.com.softec19.PlayVideo;
 import softec19.com.softec19.R;
 
 public class MainActivity extends AppCompatActivity {
