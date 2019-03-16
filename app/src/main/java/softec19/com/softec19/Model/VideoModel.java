@@ -12,11 +12,21 @@ public class VideoModel {
     private String downnvoteCount;
     private String uploaderId;
     private String videoCode;
+    private String genre;
 
     public VideoModel() {
     }
 
-    public VideoModel(String videoId, String videoName, String commentBucketId, String upvoteCount, String downnvoteCount, String uploaderId, String videoCode) {
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public VideoModel(String videoId, String videoName, String commentBucketId, String upvoteCount, String downnvoteCount, String uploaderId, String videoCode, String genre) {
+
         this.videoId = videoId;
         this.videoName = videoName;
         this.commentBucketId = commentBucketId;
@@ -24,6 +34,7 @@ public class VideoModel {
         this.downnvoteCount = downnvoteCount;
         this.uploaderId = uploaderId;
         this.videoCode = videoCode;
+        this.genre = genre;
     }
 
     @Exclude

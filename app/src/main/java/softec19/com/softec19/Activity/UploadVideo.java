@@ -37,18 +37,23 @@ import softec19.com.softec19.R;
 public class UploadVideo extends AppCompatActivity {
 
     VideoPicker videoPicker;
+    ArrayList<String> categories;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_video);
-
+        AndroidStreamable.setCredentials("maxer232@gmail.com", "hamza5213");
         videoPicker = new VideoPicker.Builder(UploadVideo.this)
                 .mode(VideoPicker.Mode.CAMERA_AND_GALLERY)
                 .directory(VideoPicker.Directory.DEFAULT)
                 .extension(VideoPicker.Extension.MP4)
                 .enableDebuggingMode(true)
                 .build();
+        categories = new ArrayList<>();
+        categories.add("Horror");
+        categories.add("Sports");
     }
 
 
@@ -67,10 +72,11 @@ public class UploadVideo extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, NewVideo newVideo) {
                         Toast.makeText(UploadVideo.this, "Hurray", Toast.LENGTH_LONG).show();
-                        VideoModel videoModel = new VideoModel(null, videoName, "", "0", "0", FirebaseAuth.getInstance().getUid(), newVideo.getShortCode());
+                        VideoModel videoModel = new VideoModel(null, videoName, "", "0", "0", FirebaseAuth.getInstance().getUid(), newVideo.getShortCode(),categories.get(index));
                         DatabaseReference videoRf = FirebaseDatabase.getInstance().getReference().child("Videos");
                         String key = videoRf.push().getKey();
                         videoRf.child(key).setValue(videoModel);
+                        FirebaseDatabase.getInstance().getReference().child("VideoGenre").child(categories.get(index)).child(key).setValue(true);
                         Bitmap thumb = ThumbnailUtils.createVideoThumbnail(tempPath,
                                 MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
                         StorageReference videoRef = FirebaseStorage.getInstance().getReference().child("VideoThumbnail/" + key + ".jpg");

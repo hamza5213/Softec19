@@ -20,8 +20,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -70,16 +73,18 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         recyclerView.setAdapter(adapter);
 
         videos = new ArrayList<>();
-        VideoModel vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
+        VideoModel vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","","");
         videos.add(vid);
 
-        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
+        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","","");
         videos.add(vid);
 
-        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
+        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","","");
         videos.add(vid);
-        AndroidStreamable.setCredentials("maxer232@gmail.com", "hamza5213");
+       fetchVideo(0);
        // startActivity(new Intent(this, PlayVideo.class));
+
+
 
     }
 
@@ -122,5 +127,48 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         spinner.setOnItemSelectedListener(this);
         spinner.setSelection(0);
         return true;
+    }
+
+    void fetchVideo(int index){
+        videos=new ArrayList<>();
+        DatabaseReference vR=FirebaseDatabase.getInstance().getReference().child("VideoGenre").child(categories.get(index));
+        vR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null)
+                {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if(snapshot.getValue(Boolean.class)==true) {
+                            String id = snapshot.getKey();
+                            fetchvmodel(id);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    void fetchvmodel(String id)
+    {
+        FirebaseDatabase.getInstance().getReference().child("Videos").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null)
+                {
+                    videos.add(dataSnapshot.getValue(VideoModel.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
