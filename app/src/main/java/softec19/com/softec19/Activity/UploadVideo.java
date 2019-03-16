@@ -1,14 +1,23 @@
 package softec19.com.softec19.Activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,6 +39,7 @@ import java.util.ArrayList;
 import cafe.adriel.androidstreamable.AndroidStreamable;
 import cafe.adriel.androidstreamable.callback.NewVideoCallback;
 import cafe.adriel.androidstreamable.model.NewVideo;
+import dmax.dialog.SpotsDialog;
 import softec19.com.softec19.Adapters.VideoRecyclerViewAdapter;
 import softec19.com.softec19.Model.VideoModel;
 import softec19.com.softec19.R;
@@ -37,11 +47,54 @@ import softec19.com.softec19.R;
 public class UploadVideo extends AppCompatActivity {
 
     VideoPicker videoPicker;
+    EditText editText ;
+
+    ArrayAdapter<String> categoryAdapter;
+    ArrayList<String> categories;
+    int categorySelected = 0;
+    AlertDialog alertDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_video);
+        alertDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.Custom).build();
+
+        editText = findViewById(R.id.vid_name);
+        setTitle("Add Video");
+
+        categories = new ArrayList<>();
+        categories.add("Horror");
+        categories.add("Sports");
+        categories.add("Drama");
+
+
+        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categories);
+        categorySpinner.setAdapter(categoryAdapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                categorySelected = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    public void uploadVideo (View view)
+    {
+        final String videoName = editText.getText().toString();
+        if(TextUtils.isEmpty(videoName))
+        {
+            Toast.makeText(this, "Name cannot be blank", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         videoPicker = new VideoPicker.Builder(UploadVideo.this)
                 .mode(VideoPicker.Mode.CAMERA_AND_GALLERY)
@@ -57,7 +110,13 @@ public class UploadVideo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            final String videoName = "Happy";
+            alertDialog.show();
+            final String videoName = editText.getText().toString();
+            if(TextUtils.isEmpty(videoName))
+            {
+                Toast.makeText(this, "Name cannot be blank", Toast.LENGTH_SHORT).show();
+                return;
+            }
             ArrayList<String> mPaths = data.getStringArrayListExtra(VideoPicker.EXTRA_VIDEO_PATH);
             final String tempPath = mPaths.get(0);
             try {
@@ -66,13 +125,12 @@ public class UploadVideo extends AppCompatActivity {
                 AndroidStreamable.uploadVideo(is, videoName, new NewVideoCallback() {
                     @Override
                     public void onSuccess(int statusCode, NewVideo newVideo) {
-                        Toast.makeText(UploadVideo.this, "Hurray", Toast.LENGTH_LONG).show();
+
                         VideoModel videoModel = new VideoModel(null, videoName, "", "0", "0", FirebaseAuth.getInstance().getUid(), newVideo.getShortCode());
                         DatabaseReference videoRf = FirebaseDatabase.getInstance().getReference().child("Videos");
                         String key = videoRf.push().getKey();
                         videoRf.child(key).setValue(videoModel);
-                        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(tempPath,
-                                MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+                        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(tempPath, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
                         StorageReference videoRef = FirebaseStorage.getInstance().getReference().child("VideoThumbnail/" + key + ".jpg");
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         thumb.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -89,7 +147,9 @@ public class UploadVideo extends AppCompatActivity {
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                                 // ...
-                                Toast.makeText(UploadVideo.this, "Hurray", Toast.LENGTH_LONG).show();
+                                alertDialog.dismiss();
+                                Toast.makeText(UploadVideo.this, "Video Uploaded!", Toast.LENGTH_LONG).show();
+                                finish();
                             }
                         });
 
@@ -98,7 +158,8 @@ public class UploadVideo extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Throwable error) {
-                        Toast.makeText(UploadVideo.this, "ohho", Toast.LENGTH_LONG).show();
+                        alertDialog.dismiss();
+                        Toast.makeText(UploadVideo.this, "Error!", Toast.LENGTH_LONG).show();
                         System.out.println(error.getMessage());
                         error.printStackTrace();
                     }

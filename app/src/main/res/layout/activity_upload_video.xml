@@ -1,9 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.UploadVideo">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main_layout_id"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+>
 
-</android.support.constraint.ConstraintLayout>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/teal"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            tools:layout_editor_absoluteX="20dp">
+
+
+            <TextView
+                android:id="@+id/video_name_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Video Name"
+                android:textColor="@android:color/background_light" />
+
+            <EditText
+                android:id="@+id/vid_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter name"
+                android:inputType="text"
+                android:textColor="@android:color/background_light"
+                android:textColorHint="?android:attr/textColorHintInverse"
+                android:textCursorDrawable="@null" />
+
+            <TextView
+                android:id="@+id/category_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Select Category"
+                android:textColor="@android:color/background_light" />
+
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="346dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/email_sign_in_button2"
+            style="?android:textAppearanceSmall"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_rounded_corners"
+            android:drawableStart="@android:drawable/ic_menu_upload"
+            android:onClick="uploadVideo"
+            android:paddingStart="30dp"
+            android:text="Select file and upload"
+            android:textColor="@android:color/background_light"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+</ScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

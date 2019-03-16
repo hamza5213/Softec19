@@ -8,4 +8,10 @@
         app:actionViewClass="android.widget.Spinner"
         android:spinnerMode="dialog"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/upload_icon"
+        android:icon="@drawable/ic_cloud_upload_black_24dp"
+        android:title="Upload Video"
+        app:showAsAction="always" />
 </menu>

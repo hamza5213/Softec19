@@ -50,6 +50,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+
         holder.mName.setText(mValues.get(position).getVideoName());
         String upvotes = mValues.get(position).getUpvoteCount();
         String downvotes = mValues.get(position).getDownnvoteCount();
