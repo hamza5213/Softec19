@@ -6,18 +6,18 @@ import java.util.ArrayList;
  * Created by hamza on 16-Mar-19.
  */
 
-public class UserProfile {
+public class UserProfileModel {
     String name;
     String status;
     ArrayList<String> genres;
 
-    public UserProfile(String name, String status, ArrayList<String> genres) {
+    public UserProfileModel(String name, String status, ArrayList<String> genres) {
         this.name = name;
         this.status = status;
         this.genres = genres;
     }
 
-    public UserProfile() {
+    public UserProfileModel() {
     }
 
     public String getName() {
