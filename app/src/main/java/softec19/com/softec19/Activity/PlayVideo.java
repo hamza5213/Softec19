@@ -24,7 +24,7 @@ public class PlayVideo extends AppCompatActivity implements OnPreparedListener {
         videoView = findViewById(R.id.video_view);
 
 
-        String shortCode = "oapvz";
+      /*  String shortCode = "oapvz";
         AndroidStreamable.getVideo(shortCode, new VideoCallback() {
             @Override
             public void onSuccess(int statusCode, Video video) {
@@ -38,7 +38,10 @@ public class PlayVideo extends AppCompatActivity implements OnPreparedListener {
             public void onFailure(int statusCode, Throwable error) {
                 // :(
             }
-        });
+        });*/
+        videoView.setVideoURI(Uri.parse("rtmp://livestfslivefs.fplive.net/livestfslive-live/"));
+
+
     }
     @Override
     public void onPrepared() {
