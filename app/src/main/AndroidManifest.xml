@@ -21,22 +21,12 @@
         <activity android:name=".Activity.UserProfile"></activity>
         <activity android:name=".Activity.VideoDisplay" />
         <activity android:name=".Activity.AdminActivity"></activity>
-        <activity android:name=".Activity.UserProfile">
-
-        </activity>
-        <activity android:name=".Activity.PlayVideo"></activity>
 
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        <activity android:name=".Activity.Login">
 
-        </activity>
-        <activity android:name=".Activity.UserProfile">
-
-        </activity>
-        <activity android:name=".Activity.VideoDisplay"></activity>
     </application>
 
 </manifest>
