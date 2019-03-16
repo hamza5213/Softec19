@@ -11,19 +11,20 @@ public class VideoModel {
     private String upvoteCount;
     private String downnvoteCount;
     private String uploaderId;
+    private String videoCode;
 
     public VideoModel() {
     }
 
-    public VideoModel(String videoId, String videoName, String commentBucketId, String upvoteCount, String downnvoteCount, String uploaderId) {
+    public VideoModel(String videoId, String videoName, String commentBucketId, String upvoteCount, String downnvoteCount, String uploaderId, String videoCode) {
         this.videoId = videoId;
         this.videoName = videoName;
         this.commentBucketId = commentBucketId;
         this.upvoteCount = upvoteCount;
         this.downnvoteCount = downnvoteCount;
         this.uploaderId = uploaderId;
+        this.videoCode = videoCode;
     }
-
 
     @Exclude
     public String getVideoId() {
@@ -33,6 +34,15 @@ public class VideoModel {
     @Exclude
     public void setVideoId(String videoId) {
         this.videoId = videoId;
+    }
+
+
+    public String getVideoCode() {
+        return videoCode;
+    }
+
+    public void setVideoCode(String videoCode) {
+        this.videoCode = videoCode;
     }
 
     public String getVideoName() {

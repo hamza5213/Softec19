@@ -53,6 +53,7 @@ dependencies {
 
     implementation 'com.github.adrielcafe:AndroidStreamable:0.5'
     implementation 'com.devbrackets.android:exomedia:4.3.0'
-
+    implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }
 apply plugin: 'com.google.gms.google-services'
