@@ -30,13 +30,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private final ArrayList<UserProfileModel> mValues;
     Context c;
+    boolean premium;
     OnListFragmentInteractionListener mListener;
     FirebaseStorage storage;
     private TextDrawable.IBuilder builder;
 
-    public UserAdapter(ArrayList<UserProfileModel> items, Context context, OnListFragmentInteractionListener mListener) {
+    public UserAdapter(ArrayList<UserProfileModel> items, Context context, OnListFragmentInteractionListener mListener,boolean p) {
         mValues = items;
         c = context;
+        this.premium=p;
         this.mListener = mListener;
         storage = FirebaseStorage.getInstance();
         builder = TextDrawable.builder()
