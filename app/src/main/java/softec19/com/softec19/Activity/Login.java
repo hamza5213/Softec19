@@ -14,10 +14,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Arrays;
 
-import softec19.com.softec19.Model.UserProfile;
+import softec19.com.softec19.Model.UserProfileModel;
 import softec19.com.softec19.R;
 
 public class Login extends AppCompatActivity {
@@ -44,6 +45,19 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==123&&resultCode==RESULT_OK)
+        {
+            DatabaseReference dR = FirebaseDatabase.getInstance().getReference("FCM_InstanceID").child(FirebaseAuth.getInstance().getUid());
+            dR.setValue(FirebaseInstanceId.getInstance().getToken());
+            checkProfile();
+        }
+
+    }
+
     void checkProfile() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child(uid);
@@ -51,7 +65,7 @@ public class Login extends AppCompatActivity {
             @Override
 
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                UserProfileModel userProfile = dataSnapshot.getValue(UserProfileModel.class);
                 if (userProfile == null) {
                     startActivity(new Intent(Login.this, UserProfile.class));
 
