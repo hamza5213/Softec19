@@ -110,7 +110,7 @@ public class UserProfile extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().child("PremiumUser").child(FirebaseAuth.getInstance().getUid()).setValue(true);
                 updateGenres();
                 Intent i=new Intent(this,MainActivity.class);
-                i.putExtra("","premium");
+                i.putExtra("status","premium");
                 startActivity(i);
                 finish();
             } else {
@@ -124,7 +124,7 @@ public class UserProfile extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("BasicUser").child(FirebaseAuth.getInstance().getUid()).setValue(true);
             updateGenres();
             Intent i=new Intent(this,MainActivity.class);
-            i.putExtra("","basic");
+            i.putExtra("status","basic");
             startActivity(i);
             finish();
         }
