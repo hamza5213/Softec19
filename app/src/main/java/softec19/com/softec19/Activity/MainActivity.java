@@ -1,5 +1,6 @@
 package softec19.com.softec19.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.bitmap.VideoDecoder;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,16 +51,18 @@ import softec19.com.softec19.Adapters.VideoRecyclerViewAdapter;
 import softec19.com.softec19.Interfaces.OnListFragmentInteractionListener;
 import softec19.com.softec19.Model.VideoModel;
 import softec19.com.softec19.R;
+import softec19.com.softec19.Utility.Categories;
 
 import static android.support.v4.view.MenuItemCompat.getActionView;
 
-public class MainActivity extends AppCompatActivity implements OnListFragmentInteractionListener , AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements OnListFragmentInteractionListener  {
 
     ArrayList<VideoModel> videos;
     private VideoRecyclerViewAdapter adapter;
     OnListFragmentInteractionListener mListener;
+    ArrayAdapter<String> categoryAdapter;
     ArrayList<String> categories;
-
+    int category = 0;
 
 
     @Override
@@ -61,25 +70,16 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("MovieHub");
-
-        categories = new ArrayList<>();
-        categories.add("Horror");
-        categories.add("Sports");
-
-
-
+        categories = Categories.getCategories();
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
         videos = new ArrayList<>();
-        VideoModel vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
-        videos.add(vid);
 
-        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
-        videos.add(vid);
 
-        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
-        videos.add(vid);
-       fetchVideo(0);
-       // startActivity(new Intent(this, PlayVideo.class));
+
+
+
+        // startActivity(new Intent(this, PlayVideo.class));
 
         mListener = this;
         RecyclerView recyclerView = findViewById(R.id.videoRecycler);
@@ -87,12 +87,34 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         adapter = new VideoRecyclerViewAdapter(videos, this, mListener);
         recyclerView.setAdapter(adapter);
 
+        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categories);
+        categorySpinner.setAdapter(categoryAdapter);
+
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                category = i;
+                fetchVideo(category);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.upload_icon:
+
+
                 startActivity(new Intent(this,UploadVideo.class));
                 return true;
 
@@ -104,46 +126,26 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
 
     @Override
     public void onListFragmentInteraction(Bundle details, String action, boolean isFabClicked) {
-
+        Intent intent = new Intent(this,VideoDisplay.class);
+        intent.putExtra("videoId",details.getString("videoId"));
+        intent.putExtra("name",details.getString("name"));
+        intent.putExtra("upvotes",details.getString("upvotes"));
+        intent.putExtra("downvotes",details.getString("downvotes"));
+        intent.putExtra("uploader",details.getString("uploader"));
+        startActivity(intent);
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
 
-        // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar_spinner, menu);
-
-
-
-        // Spinner click listener
-
-
-
-        MenuItem item = menu.findItem(R.id.spinner);
-        Spinner spinner = (Spinner) item.getActionView();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,R.layout.spinner_item, categories);
-
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(dataAdapter);
-        spinner.setOnItemSelectedListener(this);
-        spinner.setSelection(0);
         return true;
     }
 
     void fetchVideo(int index){
-        videos=new ArrayList<>();
+        videos.clear();
+        adapter.notifyDataSetChanged();
         DatabaseReference vR=FirebaseDatabase.getInstance().getReference().child("VideoGenre").child(categories.get(index));
         vR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -166,14 +168,17 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         });
     }
 
-    void fetchvmodel(String id)
+    void fetchvmodel(final String id)
     {
         FirebaseDatabase.getInstance().getReference().child("Videos").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null)
                 {
-                    videos.add(dataSnapshot.getValue(VideoModel.class));
+                    VideoModel video = dataSnapshot.getValue(VideoModel.class);
+                    video.setVideoId(id);
+                    videos.add(video);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -184,4 +189,29 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         });
 
     }
+
+
+    private InterstitialAd newInterstitialAd() {
+        InterstitialAd interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("Sample Advertisement");
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+
+            }
+
+            @Override
+            public void onAdClosed() {
+
+            }
+        });
+        return interstitialAd;
+    }
+
+
 }
