@@ -1,12 +1,10 @@
 package softec19.com.softec19.Activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +37,6 @@ import java.util.ArrayList;
 import cafe.adriel.androidstreamable.AndroidStreamable;
 import cafe.adriel.androidstreamable.callback.NewVideoCallback;
 import cafe.adriel.androidstreamable.model.NewVideo;
-import dmax.dialog.SpotsDialog;
 import softec19.com.softec19.Adapters.VideoRecyclerViewAdapter;
 import softec19.com.softec19.Model.VideoModel;
 import softec19.com.softec19.R;
@@ -102,6 +99,9 @@ public class UploadVideo extends AppCompatActivity {
                 .extension(VideoPicker.Extension.MP4)
                 .enableDebuggingMode(true)
                 .build();
+        categories = new ArrayList<>();
+        categories.add("Horror");
+        categories.add("Sports");
     }
 
 
@@ -130,7 +130,9 @@ public class UploadVideo extends AppCompatActivity {
                         DatabaseReference videoRf = FirebaseDatabase.getInstance().getReference().child("Videos");
                         String key = videoRf.push().getKey();
                         videoRf.child(key).setValue(videoModel);
-                        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(tempPath, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+                        FirebaseDatabase.getInstance().getReference().child("VideoGenre").child(categories.get(index)).child(key).setValue(true);
+                        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(tempPath,
+                                MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
                         StorageReference videoRef = FirebaseStorage.getInstance().getReference().child("VideoThumbnail/" + key + ".jpg");
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         thumb.compress(Bitmap.CompressFormat.JPEG, 100, baos);
