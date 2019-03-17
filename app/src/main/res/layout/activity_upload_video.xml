@@ -35,7 +35,7 @@ android:layout_height="match_parent"
                     android:id="@+id/video_name_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Video Name"
+                    android:text="@string/video_name"
                     android:textColor="@android:color/background_light" />
 
                 <EditText
@@ -43,7 +43,7 @@ android:layout_height="match_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Enter name"
+                    android:hint="@string/enter_name"
                     android:inputType="text"
                     android:textColor="@android:color/background_light"
                     android:textColorHint="?android:attr/textColorHintInverse"
@@ -54,7 +54,7 @@ android:layout_height="match_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="Select Category"
+                    android:text="@string/select_category"
                     android:textColor="@android:color/background_light" />
 
                 <Spinner
@@ -78,7 +78,7 @@ android:layout_height="match_parent"
                 android:drawableStart="@android:drawable/ic_menu_upload"
                 android:onClick="uploadVideo"
                 android:paddingStart="30dp"
-                android:text="Select file and upload"
+                android:text="@string/select_file_and_upload"
                 android:textColor="@android:color/background_light"
                 android:textStyle="bold" />
 

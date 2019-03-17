@@ -130,7 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="4"
         android:ems="10"
-        android:hint="Comment"
+        android:hint="@string/comment"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/SendComment"
         app:layout_constraintStart_toStartOf="parent" />
