@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="video_name">Video Name</string>
+    <string name="enter_name">Enter name</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_file_and_upload">Select file and upload</string>
+    <string name="comment">Comment</string>
 </resources>
