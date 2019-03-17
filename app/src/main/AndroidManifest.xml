@@ -16,13 +16,14 @@
         <activity android:name=".Activity.Login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Activity.UserProfile"></activity>
         <activity android:name=".Activity.VideoDisplay" />
-        <activity android:name=".Activity.AdminActivity"></activity>
+        <activity android:name=".Activity.AdminActivity">
+
+        </activity>
         <activity android:name=".Activity.UploadVideo"></activity>
 
 
