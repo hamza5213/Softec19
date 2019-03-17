@@ -61,6 +61,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("videoId", holder.mItem.getVideoId());
+                bundle.putString("name", holder.mItem.getVideoName());
+                bundle.putString("upvotes", holder.mItem.getUpvoteCount());
+                bundle.putString("downvotes", holder.mItem.getDownnvoteCount());
+                bundle.putString("uploader", holder.mItem.getUploaderId());
                 mListener.onListFragmentInteraction(bundle, "videoDetails", true);
             }
         });

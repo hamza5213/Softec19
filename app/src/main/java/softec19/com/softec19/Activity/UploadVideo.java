@@ -1,5 +1,6 @@
 package softec19.com.softec19.Activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,14 +41,20 @@ import java.util.ArrayList;
 import cafe.adriel.androidstreamable.AndroidStreamable;
 import cafe.adriel.androidstreamable.callback.NewVideoCallback;
 import cafe.adriel.androidstreamable.model.NewVideo;
+import dmax.dialog.SpotsDialog;
 import softec19.com.softec19.Adapters.VideoRecyclerViewAdapter;
 import softec19.com.softec19.Model.VideoModel;
 import softec19.com.softec19.R;
+import softec19.com.softec19.Utility.Categories;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class UploadVideo extends AppCompatActivity {
 
     VideoPicker videoPicker;
     EditText editText ;
+    private AdView mAdView;
 
     ArrayAdapter<String> categoryAdapter;
     ArrayList<String> categories;
@@ -52,19 +62,18 @@ public class UploadVideo extends AppCompatActivity {
     AlertDialog alertDialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_video);
         alertDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.Custom).build();
+        AndroidStreamable.setCredentials("maxer232@gmail.com", "hamza5213");
 
         editText = findViewById(R.id.vid_name);
         setTitle("Add Video");
 
-        categories = new ArrayList<>();
-        categories.add("Horror");
-        categories.add("Sports");
-        categories.add("Drama");
+        categories = Categories.getCategories();
 
 
         Spinner categorySpinner = findViewById(R.id.categorySpinner);
@@ -82,6 +91,11 @@ public class UploadVideo extends AppCompatActivity {
 
             }
         });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
     }
 
     public void uploadVideo (View view)
@@ -99,9 +113,7 @@ public class UploadVideo extends AppCompatActivity {
                 .extension(VideoPicker.Extension.MP4)
                 .enableDebuggingMode(true)
                 .build();
-        categories = new ArrayList<>();
-        categories.add("Horror");
-        categories.add("Sports");
+
     }
 
 
@@ -125,12 +137,12 @@ public class UploadVideo extends AppCompatActivity {
                 AndroidStreamable.uploadVideo(is, videoName, new NewVideoCallback() {
                     @Override
                     public void onSuccess(int statusCode, NewVideo newVideo) {
-
-                        VideoModel videoModel = new VideoModel(null, videoName, "", "0", "0", FirebaseAuth.getInstance().getUid(), newVideo.getShortCode());
+                        System.out.println(categories.get(categorySelected));
+                        VideoModel videoModel = new VideoModel(null, videoName, "", "0", "0", FirebaseAuth.getInstance().getUid(), newVideo.getShortCode(),categories.get(categorySelected));
                         DatabaseReference videoRf = FirebaseDatabase.getInstance().getReference().child("Videos");
                         String key = videoRf.push().getKey();
                         videoRf.child(key).setValue(videoModel);
-                        FirebaseDatabase.getInstance().getReference().child("VideoGenre").child(categories.get(index)).child(key).setValue(true);
+                        FirebaseDatabase.getInstance().getReference().child("VideoGenre").child(categories.get(categorySelected)).child(key).setValue(true);
                         Bitmap thumb = ThumbnailUtils.createVideoThumbnail(tempPath,
                                 MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
                         StorageReference videoRef = FirebaseStorage.getInstance().getReference().child("VideoThumbnail/" + key + ".jpg");
