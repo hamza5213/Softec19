@@ -39,7 +39,7 @@ public class PlayVideo extends AppCompatActivity implements OnPreparedListener {
                 // :(
             }
         });*/
-        videoView.setVideoURI(Uri.parse("rtmp://livestfslivefs.fplive.net/livestfslive-live/"));
+        videoView.setVideoURI(Uri.parse("http://45.77.88.101:8080/hls/mystream.m3u8"));
 
 
     }

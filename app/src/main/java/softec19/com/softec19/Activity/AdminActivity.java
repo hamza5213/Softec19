@@ -20,5 +20,6 @@ public class AdminActivity extends AppCompatActivity {
         ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         smartTabLayout.setViewPager(viewPager);
+        smartTabLayout.setDistributeEvenly(true);
     }
 }
