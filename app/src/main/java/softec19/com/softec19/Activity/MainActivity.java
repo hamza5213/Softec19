@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,26 +67,38 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         categories.add("Sports");
 
 
+
+
+        videos = new ArrayList<>();
+        VideoModel vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
+        videos.add(vid);
+
+        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
+        videos.add(vid);
+
+        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","");
+        videos.add(vid);
+       fetchVideo(0);
+       // startActivity(new Intent(this, PlayVideo.class));
+
         mListener = this;
         RecyclerView recyclerView = findViewById(R.id.videoRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new VideoRecyclerViewAdapter(videos, this, mListener);
         recyclerView.setAdapter(adapter);
 
-        videos = new ArrayList<>();
-        VideoModel vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","","");
-        videos.add(vid);
+    }
 
-        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","","");
-        videos.add(vid);
-
-        vid = new VideoModel("thehobbit-thumb", "The Hobbit", "asdas", "43", "4", " ","","");
-        videos.add(vid);
-       fetchVideo(0);
-       // startActivity(new Intent(this, PlayVideo.class));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upload_icon:
+                startActivity(new Intent(this,UploadVideo.class));
+                return true;
 
 
-
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

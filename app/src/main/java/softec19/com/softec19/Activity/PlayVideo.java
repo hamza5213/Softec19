@@ -24,6 +24,7 @@ public class PlayVideo extends AppCompatActivity implements OnPreparedListener {
         videoView = findViewById(R.id.video_view);
 
 
+
       /*  String shortCode = "oapvz";
         AndroidStreamable.getVideo(shortCode, new VideoCallback() {
             @Override
