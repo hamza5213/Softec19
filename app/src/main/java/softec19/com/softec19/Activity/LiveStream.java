@@ -18,7 +18,8 @@ public class LiveStream extends AppCompatActivity implements OnPreparedListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_video);
+        setContentView(R.layout.activity_live_stream);
+        videoView = findViewById(R.id.video_view1);
         videoView.setVideoURI(Uri.parse("http://45.77.88.101:8080/hls/mystream.m3u8"));
     }
 

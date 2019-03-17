@@ -1,8 +1,11 @@
 package softec19.com.softec19.Activity;
 
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
@@ -21,5 +24,26 @@ public class AdminActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         smartTabLayout.setViewPager(viewPager);
         smartTabLayout.setDistributeEvenly(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upload_icon:
+
+
+                startActivity(new Intent(this,UploadVideo.class));
+                return true;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+            getMenuInflater().inflate(R.menu.action_bar_spinner, menu);
+            return true;
     }
 }

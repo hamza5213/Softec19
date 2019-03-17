@@ -1,6 +1,7 @@
 package softec19.com.softec19.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -257,16 +258,19 @@ public class VideoDisplay extends AppCompatActivity implements OnListFragmentInt
         String newUpvotes;
         if(increment)
         {
-            voteState =1;
+
             newUpvotes = Integer.toString(Integer.parseInt(upvotes)+1);
         }
         else
         {
+
             newUpvotes = Integer.toString(Integer.parseInt(upvotes)-1);
         }
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Videos").child("upvoteCount");
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Videos").child(videoId).child("upvoteCount");
         ref.setValue(newUpvotes);
         ((TextView)findViewById(R.id.upvotes)).setText(newUpvotes);
+        upvotes=newUpvotes;
+        System.out.println(upvotes);
 
     }
 
@@ -275,16 +279,19 @@ public class VideoDisplay extends AppCompatActivity implements OnListFragmentInt
         String newDownvotes;
         if(increment)
         {
-            voteState =2;
+
             newDownvotes = Integer.toString(Integer.parseInt(downvotes)+1);
         }
         else
         {
+
             newDownvotes = Integer.toString(Integer.parseInt(downvotes)-1);
         }
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Videos").child("downvoteCount");
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Videos").child(videoId).child("downnvoteCount");
         ref.setValue(newDownvotes);
         ((TextView)findViewById(R.id.downvotes)).setText(newDownvotes);
+        downvotes=newDownvotes;
+        System.out.println(downvotes);
 
     }
 
@@ -298,19 +305,24 @@ public class VideoDisplay extends AppCompatActivity implements OnListFragmentInt
                 upDr.child(videoId).setValue(true);
                 upvoteButton.setColorFilter(Color.rgb(0, 0, 255));
                 upvoteUpdate(true);
+                voteState =1;
                 //TODO user has did nothing
             }
-           /* else if(voteState==2)
+            else if(voteState==2)
             {
                 downDr.child(videoId).setValue(true);
                 upDr.child(videoId).setValue(false);
                 //TODO user has clicked first time
                 upvoteButton.setColorFilter(Color.rgb(0, 0, 255));
                 downvoteButton.clearColorFilter();
-                downvoteUpdate(true);
-                upvoteUpdate(false);
+                downvoteUpdate(false);
+                upvoteUpdate(true);
+                if(downvotes.equals(upvotes))
+                    voteState =0;
+                else
+                    voteState=1;
 
-            }*/
+            }
         }
 
 
@@ -327,9 +339,10 @@ public class VideoDisplay extends AppCompatActivity implements OnListFragmentInt
                 downDr.child(videoId).setValue(true);
                 downvoteButton.setColorFilter(Color.rgb(0, 0, 255));
                 downvoteUpdate(true);
+                voteState =2;
                 //TODO user has clicked first time
             }
-            /*else if(voteState==1)
+            else if(voteState==1)
             {
                 downDr.child(videoId).setValue(true);
                 upDr.child(videoId).setValue(false);
@@ -338,11 +351,18 @@ public class VideoDisplay extends AppCompatActivity implements OnListFragmentInt
                 upvoteButton.clearColorFilter();
                 upvoteUpdate(false);
                 downvoteUpdate(true);
+                voteState =2;
 
-            }*/
+            }
         }
     }
 
+    public void onPlayClick(View view)
+    {
+        Intent i=new Intent(this,PlayVideo.class);
+        i.putExtra("videoId",videoId);
+        startActivity(i);
+    }
 
     @Override
     public void onListFragmentInteraction(Bundle details, String action, boolean isFabClicked) {
