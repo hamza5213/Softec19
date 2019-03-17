@@ -11,22 +11,32 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.MainActivity"></activity>
         <activity android:name=".Activity.PlayVideo" >
+
+        </activity>
+        <activity android:name=".Activity.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Login"></activity>
         <activity android:name=".Activity.UserProfile"></activity>
         <activity android:name=".Activity.VideoDisplay" />
         <activity android:name=".Activity.AdminActivity"></activity>
+        <activity android:name=".Activity.UploadVideo"></activity>
 
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 </manifest>

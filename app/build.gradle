@@ -58,5 +58,6 @@ dependencies {
     implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'com.google.android.gms:play-services-ads:17.1.1'
 }
 apply plugin: 'com.google.gms.google-services'
