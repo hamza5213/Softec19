@@ -233,9 +233,8 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==123)
-        {
+
             fetchVideo(category);
-        }
+
     }
 }
