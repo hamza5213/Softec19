@@ -63,4 +63,13 @@ public class UserProfileModel {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof UserProfileModel)
+        {
+            return this.userId.equals(((UserProfileModel)obj).getUserId());
+        }
+        return false;
+    }
 }

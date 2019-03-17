@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
     ArrayAdapter<String> categoryAdapter;
     ArrayList<String> categories;
     int category = 0;
+    String status;
+    int posIndex;
+    Spinner categorySpinner;
 
 
     @Override
@@ -74,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
         videos = new ArrayList<>();
+        status=getIntent().getStringExtra("status");
 
 
 
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         adapter = new VideoRecyclerViewAdapter(videos, this, mListener);
         recyclerView.setAdapter(adapter);
 
-        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+         categorySpinner = findViewById(R.id.categorySpinner);
         categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categories);
         categorySpinner.setAdapter(categoryAdapter);
 
@@ -114,9 +119,14 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         switch (item.getItemId()) {
             case R.id.upload_icon:
 
-
-                startActivity(new Intent(this,UploadVideo.class));
+                Intent i=new Intent(this,UploadVideo.class);
+                startActivityForResult(i,1234);
                 return true;
+            case R.id.live:
+                Intent i1=new Intent(this,LiveStream.class);
+                startActivity(i1);
+                return true;
+
 
 
         }
@@ -139,8 +149,15 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_bar_spinner, menu);
-        return true;
+        if(status.equals("premium")) {
+            getMenuInflater().inflate(R.menu.action_bar_spinner, menu);
+            return true;
+        }
+        else
+        {
+            getMenuInflater().inflate(R.menu.menu_list, menu);
+            return true;
+        }
     }
 
     void fetchVideo(int index){
@@ -214,4 +231,11 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==123)
+        {
+            fetchVideo(category);
+        }
+    }
 }

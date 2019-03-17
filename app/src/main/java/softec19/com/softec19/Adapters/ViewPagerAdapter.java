@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+import softec19.com.softec19.Fragments.BasicUser;
+import softec19.com.softec19.Fragments.PremiumUser;
 import softec19.com.softec19.Interfaces.OnListFragmentInteractionListener;
 
 /**
@@ -25,7 +27,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter implements OnListFrag
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
         fragments=new ArrayList<>();
-
+        fragments.add(new BasicUser());
+        fragments.add(new PremiumUser());
     }
 
     @Override

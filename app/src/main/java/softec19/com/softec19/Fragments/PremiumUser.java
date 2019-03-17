@@ -15,6 +15,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -47,34 +48,42 @@ public class PremiumUser extends Fragment implements OnListFragmentInteractionLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_user_basic, container, false);
+        View view=inflater.inflate(R.layout.fragment_premium_user, container, false);
         firebaseDatabase=FirebaseDatabase.getInstance();
         userProfileArrayList =new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.basicUser_rv);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.premiumUser_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new UserAdapter(userProfileArrayList,context, this);
+        adapter = new UserAdapter(userProfileArrayList,context, this,true);
         recyclerView.setAdapter(adapter);
-        fetchUser();
+        fetchUser1();
         return view;
     }
 
-    void fetchUser()
+    void fetchUser1()
     {
-        FirebaseDatabase.getInstance().getReference("User").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("PremiumUser").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.getValue()!=null)
-                {
-                    UserProfileModel userProfileModel=dataSnapshot.getValue(UserProfileModel.class);
-                    userProfileModel.setUserId(dataSnapshot.getKey());
-                    userProfileArrayList.add(userProfileModel);
-                    adapter.notifyDataSetChanged();
-
+                if(dataSnapshot.getValue()!=null){
+                    if(dataSnapshot.getValue(Boolean.class))
+                    {
+                        fetchUser(dataSnapshot.getKey());
+                    }
                 }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(dataSnapshot.getValue()!=null){
+                    if(dataSnapshot.getValue(Boolean.class))
+                    {
+                        fetchUser(dataSnapshot.getKey());
+                    }
+                    else
+                    {
+                        userProfileArrayList.contains(new UserProfileModel(null,null,null,dataSnapshot.getKey()));
+                    }
+                }
 
             }
 
@@ -93,6 +102,30 @@ public class PremiumUser extends Fragment implements OnListFragmentInteractionLi
 
             }
         });
+
+
+
+    }
+
+    void fetchUser(String id)
+    {
+        FirebaseDatabase.getInstance().getReference("User").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null) {
+                    UserProfileModel userProfileModel = dataSnapshot.getValue(UserProfileModel.class);
+                    userProfileModel.setUserId(dataSnapshot.getKey());
+                    userProfileArrayList.add(userProfileModel);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        }) ;
+
     }
 
     @Override

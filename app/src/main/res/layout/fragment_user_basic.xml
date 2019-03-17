@@ -7,6 +7,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/basicUser_rv"
             android:layout_width="0dp"
@@ -17,7 +18,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"></android.support.v7.widget.RecyclerView>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></android.support.v7.widget.RecyclerView>
 
     </android.support.constraint.ConstraintLayout>
 

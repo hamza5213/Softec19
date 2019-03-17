@@ -76,7 +76,16 @@ public class Login extends AppCompatActivity {
                     editor.putString("Name", userProfile.getName());
                     editor.putString("status", userProfile.getStatus());
                     editor.commit();
-                    startActivity(new Intent(Login.this, MainActivity.class));
+                    if(userProfile.getStatus().equals("admin"))
+                    {
+                        Intent intent=new Intent(Login.this, AdminActivity.class);
+                        intent.putExtra("status",userProfile.getStatus());
+                        startActivity(intent);
+                    }
+                    else{
+                    Intent intent=new Intent(Login.this, MainActivity.class);
+                    intent.putExtra("status",userProfile.getStatus());
+                    startActivity(intent);}
                 }
                 finish();
             }

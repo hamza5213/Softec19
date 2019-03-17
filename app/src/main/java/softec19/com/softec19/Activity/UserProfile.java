@@ -1,7 +1,10 @@
 package softec19.com.softec19.Activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,6 +21,8 @@ import belka.us.androidtoggleswitch.widgets.ToggleSwitch;
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
 import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
 import ir.mirrajabi.searchdialog.core.SearchResultListener;
+import softec19.com.softec19.Adapters.VideoRecyclerViewAdapter;
+import softec19.com.softec19.Adapters.genreAdapter;
 import softec19.com.softec19.Model.SampleSearchModel;
 import softec19.com.softec19.Model.UserProfileModel;
 import softec19.com.softec19.R;
@@ -32,6 +37,7 @@ public class UserProfile extends AppCompatActivity {
     ToggleSwitch toggleSwitch;
     ArrayList<SampleSearchModel> genresList;
     SimpleSearchDialogCompat simpleSearchDialogCompat;
+    genreAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +47,6 @@ public class UserProfile extends AppCompatActivity {
         key="pre";
         PremiumKey="pre";
         genres=new ArrayList<>();
-        genres.add("Horror");
-        genres.add("History");
-        genres.add("bollywood");
         toggleSwitch=findViewById(R.id.user_profile_toggle);
         toggleSwitch.setCheckedTogglePosition(0);
         toggleSwitch.setOnToggleSwitchChangeListener(new BaseToggleSwitch.OnToggleSwitchChangeListener() {
@@ -75,6 +78,7 @@ public class UserProfile extends AppCompatActivity {
                        if(!genres.contains(item.getTitle()))
                        {
                            genres.add(item.getTitle());
+                           adapter.notifyDataSetChanged();
                        }
                        else
                        {
@@ -83,6 +87,11 @@ public class UserProfile extends AppCompatActivity {
                        dialog.dismiss();
                    }
                });
+
+        RecyclerView recyclerView = findViewById(R.id.genresRC);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new genreAdapter(genres, this);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -96,18 +105,28 @@ public class UserProfile extends AppCompatActivity {
         if(premiumCheck) {
             if (key.equals(PremiumKey)) {
 
-                UserProfileModel userProfile = new UserProfileModel(name, "Premium", genres);
+                UserProfileModel userProfile = new UserProfileModel(name, "premium", genres);
                 userRf.child(FirebaseAuth.getInstance().getUid()).setValue(userProfile);
+                FirebaseDatabase.getInstance().getReference().child("PremiumUser").child(FirebaseAuth.getInstance().getUid()).setValue(true);
                 updateGenres();
+                Intent i=new Intent(this,MainActivity.class);
+                i.putExtra("","premium");
+                startActivity(i);
+                finish();
             } else {
                 //TODO Dialog your key is not correct
             }
         }
         else
         {
-            UserProfileModel userProfile = new UserProfileModel(name, "Basic", genres);
+            UserProfileModel userProfile = new UserProfileModel(name, "basic", genres);
             userRf.child(FirebaseAuth.getInstance().getUid()).setValue(userProfile);
+            FirebaseDatabase.getInstance().getReference().child("BasicUser").child(FirebaseAuth.getInstance().getUid()).setValue(true);
             updateGenres();
+            Intent i=new Intent(this,MainActivity.class);
+            i.putExtra("","basic");
+            startActivity(i);
+            finish();
         }
     }
 
@@ -122,15 +141,8 @@ public class UserProfile extends AppCompatActivity {
 
     private ArrayList<SampleSearchModel> createSampleData(){
         ArrayList<SampleSearchModel> items = new ArrayList<>();
-        items.add(new SampleSearchModel("First item"));
-        items.add(new SampleSearchModel("Second item"));
-        items.add(new SampleSearchModel("Third item"));
-        items.add(new SampleSearchModel("The ultimate item"));
-        items.add(new SampleSearchModel("Last item"));
-        items.add(new SampleSearchModel("Lorem ipsum"));
-        items.add(new SampleSearchModel("Dolor sit"));
-        items.add(new SampleSearchModel("Some random word"));
-        items.add(new SampleSearchModel("guess who's back"));
+        items.add(new SampleSearchModel("Horror"));
+        items.add(new SampleSearchModel("Science"));
         return items;
     }
 
